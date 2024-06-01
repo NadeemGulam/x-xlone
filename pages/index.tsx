@@ -8,7 +8,7 @@ import { verifyUserGoogleTokenQuery } from "@/graphql/query/user";
 import { useCurrentUser } from "@/hooks/user";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BsBell, BsBookmark, BsEnvelope, BsTwitter } from "react-icons/bs";
 import {
@@ -20,6 +20,8 @@ import {
   BiUser,
 } from "react-icons/bi";
 import { SlOptions } from "react-icons/sl";
+import { useCreateTweets, useGetAllTweets } from "@/hooks/tweet";
+import { Tweet } from "@/gql/graphql";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -64,8 +66,13 @@ const sidebarMenuItems: TwitterSidebarButton[] = [
 ];
 
 export default function Home() {
-  const { user, refetch } = useCurrentUser();
+  const { user } = useCurrentUser();
+  const { tweets = [] } = useGetAllTweets();
   const queryClient = useQueryClient();
+  const { mutate } = useCreateTweets();
+
+
+  const [content, setContent] = useState('');
 
   console.log(user);
 
@@ -113,12 +120,18 @@ export default function Home() {
   );
 
   // This function is for when we click on image to tweet
-  const handleSelectImage=useCallback(()=>{
-    const input= document.createElement("input");
-    input.setAttribute("type","file");
-    input.setAttribute("accept","image/*");
+  const handleSelectImage = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
     input.click();
-  },[])
+  }, [])
+
+  const handleCreatePost = useCallback(() => [
+    mutate({
+      content,
+    })
+  ], [content, mutate]);
 
   return (
     <div className={inter.className}>
@@ -167,10 +180,10 @@ export default function Home() {
                   />)}
                 </div>
                 <div className="col-span-11">
-                  <textarea className="bg-transparent w-full text-xl px-3 border-b border-slate-700" placeholder="What's happening??" rows={3}></textarea>
+                  <textarea value={content} onChange={e => setContent(e.target.value)} className="bg-transparent w-full text-xl px-3 border-b border-slate-700" placeholder="What's happening??" rows={3}></textarea>
                   <div className="mt-2 flex justify-between items-center">
-                    <BiImageAlt onClick={handleSelectImage} className="text-xl"/>
-                    <button className="bg-[#1d9bf0] font-semibold py-2 px-4 rounded-full   text-sm">
+                    <BiImageAlt onClick={handleSelectImage} className="text-xl" />
+                    <button onClick={handleCreatePost} className="bg-[#1d9bf0] font-semibold py-2 px-4 rounded-full   text-sm">
                       Post
                     </button>
                   </div>
@@ -178,13 +191,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
+          {
+            tweets?.map((tweet) => tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null)
+          }
         </div>
         <div className="col-span-3 p-5">
           {!user && (
@@ -201,4 +210,5 @@ export default function Home() {
 function handleSelectImage() {
   throw new Error("Function not implemented.");
 }
+
 
