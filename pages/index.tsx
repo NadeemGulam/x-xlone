@@ -14,6 +14,7 @@ import { BsBell, BsBookmark, BsEnvelope, BsTwitter } from "react-icons/bs";
 import {
   BiHash,
   BiHomeCircle,
+  BiImageAlt,
   BiMobile,
   BiMoney,
   BiUser,
@@ -110,6 +111,15 @@ export default function Home() {
     },
     [queryClient]
   );
+
+  // This function is for when we click on image to tweet
+  const handleSelectImage=useCallback(()=>{
+    const input= document.createElement("input");
+    input.setAttribute("type","file");
+    input.setAttribute("accept","image/*");
+    input.click();
+  },[])
+
   return (
     <div className={inter.className}>
       <div className=" grid grid-cols-12 h-screen w-screen px-32">
@@ -144,6 +154,30 @@ export default function Home() {
           </div>)}
         </div>
         <div className="col-span-5 border-r-[1px] border-l-[1px] h-screen overflow-scroll border-gray-600">
+          <div>
+            <div className="border border-r-0 border-l-0 border-b-0 border-gray-600 p-4 hover:bg-slate-800 transition-all cursor-pointer">
+              <div className="gap-3 grid grid-cols-12">
+                <div className="col-span-1">
+                  {user?.profileImageURL && (<Image
+                    className="rounded-full"
+                    width={50}
+                    height={50}
+                    src={user?.profileImageURL}
+                    alt="iser-image"
+                  />)}
+                </div>
+                <div className="col-span-11">
+                  <textarea className="bg-transparent w-full text-xl px-3 border-b border-slate-700" placeholder="What's happening??" rows={3}></textarea>
+                  <div className="mt-2 flex justify-between items-center">
+                    <BiImageAlt onClick={handleSelectImage} className="text-xl"/>
+                    <button className="bg-[#1d9bf0] font-semibold py-2 px-4 rounded-full   text-sm">
+                      Post
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <FeedCard />
           <FeedCard />
           <FeedCard />
@@ -164,3 +198,7 @@ export default function Home() {
     </div>
   );
 }
+function handleSelectImage() {
+  throw new Error("Function not implemented.");
+}
+
