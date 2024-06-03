@@ -9,14 +9,13 @@ import { useRouter } from "next/router";
 import { graphqlClient } from "@/clients/api";
 import { getUserByIdQuery } from "@/graphql/query/user";
 
-interface ServerProps{
-    userInfo?:User
+interface ServerProps {
+    userInfo?: User
 }
 
 const UserProfile: NextPage<ServerProps> = (props) => {
 
     const router = useRouter();
-
     return (
         <div>
             <TweeterLayout>
@@ -50,16 +49,16 @@ const UserProfile: NextPage<ServerProps> = (props) => {
 export const getServerSideProps: GetServerSideProps<ServerProps> = async (context) => {
     const id = context.query.id as string | undefined
 
-    if (!id) return { notFound: true , props:{userInfo:undefined}}
+    if (!id) return { notFound: true, props: { userInfo: undefined } }
 
 
     const userInfo = await graphqlClient.request(getUserByIdQuery, { id })
 
-    if(!userInfo?.getUserById){
-        return  {notFound: true }
+    if (!userInfo?.getUserById) {
+        return { notFound: true }
     }
     return {
-        props: { userInfo :userInfo.getUserById as User}
+        props: { userInfo: userInfo.getUserById as User }
     }
 }
 
