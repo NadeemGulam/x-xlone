@@ -146,12 +146,34 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                         {props.children}
                     </div>
                     <div className="col-span-0 sm:col-span-3 p-5">
-                        {!user && (
+                        {!user ? (
                             <div className="p-5 bg-slate-700 rounded-lg">
                                 <h1 className="my-2 text-xl">New To Twitter?</h1>
                                 <GoogleLogin onSuccess={handleLoginWithGoogle} />
                             </div>
-                        )}
+                        ) :
+                            <div className="py-3 px-4 bg-slate-800 rounded-lg">
+                                <h1 className="my-2 text-xl mb-3">Users you may know</h1>
+                                {
+                                    user?.recommendedUsers?.map(el =>
+                                        <div key={el?.id} className='flex items-center gap-3 mt-2'>{el?.profileImageURL && (
+                                            <Image
+                                                src={el.profileImageURL}
+                                                alt='profile-image'
+                                                className='rounded-full'
+                                                height={60}
+                                                width={60}
+                                            />
+                                        )}
+                                            <div className='text-lg'>
+                                                <div>{el?.firstName} {el?.lastName}</div>
+                                                <Link href={`/${el?.id}`} className='bg-white text-black text-sm px-5 py-1 w-full  rounded-lg'>View</Link>
+                                            </div>
+                                        </div>)
+                                }
+                            </div>
+                        }
+
                     </div>
                 </div>
             </div>
