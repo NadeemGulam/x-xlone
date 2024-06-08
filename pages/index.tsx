@@ -74,6 +74,11 @@ export default function Home(props: HomeProps) {
   }, [handleInputChangeFile])
 
   const handleCreatePost = useCallback(async () => {
+    // Show toast message if both content and imageURL are empty
+    if (!content && !imageURL) {
+      toast.error("Please add text or an image before posting.");
+      return; // Prevent further execution
+    }
     await mutateAsync({
       content,
       imageURL
