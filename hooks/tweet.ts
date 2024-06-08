@@ -19,11 +19,8 @@ export const useGetAllTweets = () => {
                 return data;
             } catch (error) {
                 console.error("Error fetching tweets:", error);
-                return { getAllTweets: [] }; // Return an empty array in case of error
+                return { getAllTweets: [] };
             }
-        },
-        onError: (error) => {
-            console.error("Error in fetching tweets:", error);
         }
     });
 
