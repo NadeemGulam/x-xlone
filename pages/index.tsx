@@ -26,7 +26,7 @@ export default function Home(props: HomeProps) {
   const [imageURL, setImageURL] = useState('');
   const { tweets = props.tweets as Tweet[] } = useGetAllTweets();
 
-  console.log(user);
+  // console.log(user);
 
   const handleInputChangeFile = useCallback((input: HTMLInputElement) => {
     return async (event: Event) => {

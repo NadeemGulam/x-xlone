@@ -34,6 +34,7 @@ query  GetCurrentUser{
     tweets{
         id
         content
+        imageURL
         author {
           id
           profileImageURL
@@ -66,6 +67,7 @@ query GetuserById($id: ID!) {
     tweets {
       content
       id
+      imageURL
       author {
         firstName
         lastName

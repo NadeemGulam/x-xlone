@@ -11,7 +11,7 @@ interface FeedCardProps {
 }
 
 const FeedCard: React.FC<FeedCardProps> = (props) => {
-
+  // console.log(props);
   const { data } = props
   return (
 

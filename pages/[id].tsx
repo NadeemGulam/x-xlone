@@ -12,12 +12,14 @@ import { userInfo } from "os";
 import { useCallback, useMemo } from "react";
 import { followUserMutation, unfollowUserMutation } from "@/graphql/mutations/user";
 import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 interface ServerProps {
     userInfo?: User
 }
 
 const UserProfile: NextPage<ServerProps> = (props) => {
+    // console.log('Component props:', props.userInfo?.tweets);
 
     const router = useRouter();
 
@@ -48,7 +50,7 @@ const UserProfile: NextPage<ServerProps> = (props) => {
             <TweeterLayout>
                 <div>
                     <nav className=" flex items-center gap-3 py-2 px-2">
-                        <BsArrowLeftShort className="text-4xl" />
+                       <Link href={`/`}><BsArrowLeftShort className="text-4xl" /></Link> 
                         <div>
                             <h1 className="text-xl font-bold">
                                 {props.userInfo?.firstName} {props.userInfo?.lastName}
