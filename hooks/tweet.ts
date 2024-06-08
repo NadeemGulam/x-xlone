@@ -3,6 +3,7 @@ import { CreateTweetData } from "@/gql/graphql";
 import { createTweetMutation } from "@/graphql/mutations/tweet";
 import { getAllTweetsQuery } from "@/graphql/query/tweet";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 // useGetAllTweets hook
@@ -23,26 +24,26 @@ export const useGetAllTweets = () => {
                 console.error("Error fetching tweets:", error);
                 return { getAllTweets: [] }; // Return an empty array in case of error
             }
-        },
-        onSuccess: async () => {
-            console.log("Inside OnSuccess");
-            try {
-                await queryClient.invalidateQueries({ queryKey: ["all-tweet"] });
-                console.log("Queries invalidated");
-                await queryClient.refetchQueries({ queryKey: ["all-tweet"] }); // Manually refetch to ensure fresh data
-            } catch (error) {
-                console.error("Error in invalidating queries:", error);
-            }
         }
     });
 
-    // Extract error from the query result
     const { data, isError, error, isLoading } = query;
 
-    // Handle error state in your component
-    if (isError) {
-        console.error("Error in fetching tweets:", error);
-    }
+    useEffect(() => {
+        if (data && !isError) {
+            (async () => {
+                try {
+                    console.log("Inside OnSuccess effect");
+                    await queryClient.invalidateQueries({ queryKey: ["all-tweet"] });
+                    console.log("Queries invalidated");
+                    await queryClient.refetchQueries({ queryKey: ["all-tweet"] }); // Manually refetch to ensure fresh data
+                    console.log("Queries refetched");
+                } catch (error) {
+                    console.error("Error in invalidating or refetching queries:", error);
+                }
+            })();
+        }
+    }, [data, isError, queryClient]);
 
     return { tweets: data?.getAllTweets, isError, error, isLoading };
 }
