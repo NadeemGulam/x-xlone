@@ -13,6 +13,8 @@ import { verifyUserGoogleTokenQuery } from '@/graphql/query/user';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import { FaGithub, FaLinkedin, FaFilePdf } from 'react-icons/fa';
+import { FaXTwitter } from "react-icons/fa6";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -108,7 +110,8 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                     <div className=" col-span-2 sm:col-span-3 pt-2 relative flex sm:justify-end pr-6">
                         <div>
                             <div className="text-3xl w-fit hover:bg-gray-800 p-3  rounded-full h-fit cursor-pointer transition-all">
-                                <BsTwitter />
+                                {/* <BsTwitter /> */}
+                                <FaXTwitter />
                             </div>
 
                             <div className="mt-2 font-semibold text-lg pr-4">
@@ -129,8 +132,8 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                                     <button className="hidden sm:block bg-[#1d9bf0] font-semibold p-3 rounded-full  w-[80%] text-lg">
                                         Post
                                     </button>
-                                    <button className="block mr-10 sm:hidden bg-[#1d9bf0] font-semibold p-3 rounded-full  w-[80%] text-lg">
-                                        <BsTwitter />
+                                    <button className="block mr-2.5 sm:hidden bg-[#1d9bf0] font-semibold p-3 rounded-full  w-[80%] text-lg">
+                                        <FaXTwitter />
                                     </button>
                                 </div>
                             </div>
@@ -145,7 +148,7 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                     <div className="col-span-10 sm:col-span-5 border-r-[1px] border-l-[1px] h-screen overflow-scroll border-gray-600">
                         {props.children}
                     </div>
-                    <div className="col-span-0 sm:col-span-3 p-5">
+                    <div className="col-span-0 sm:col-span-3 p-5 flex flex-col justify-between">
                         {!user ? (
                             <div className="p-5 bg-slate-700 rounded-lg">
                                 <h1 className="my-2 text-xl">New To Twitter?</h1>
@@ -155,29 +158,65 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                             <div className="py-3 px-4 bg-slate-800 rounded-lg">
                                 <h1 className="my-2 text-xl mb-3">Users you may know</h1>
                                 {
-                                    user?.recommendedUsers?.map(el =>
-                                        <div key={el?.id} className='flex items-center gap-3 mt-2'>{el?.profileImageURL && (
+                                    user.recommendedUsers?.length == 0 ?
+                                        <div className='flex items-center gap-3 mt-2'>{
                                             <Image
-                                                src={el.profileImageURL}
+                                                src="https://lh3.googleusercontent.com/a/ACg8ocJTMsB990Y1W8wbsVqrl1uwhfpqBdwW1qWp-WNtB9Di87uu7mpOCg=s96-c"
                                                 alt='profile-image'
                                                 className='rounded-full'
                                                 height={60}
                                                 width={60}
                                             />
-                                        )}
+                                        }
                                             <div className='text-lg'>
-                                                <div>{el?.firstName} {el?.lastName}</div>
-                                                <Link href={`/${el?.id}`} className='bg-white text-black text-sm px-5 py-1 w-full  rounded-lg'>View</Link>
+                                                <div>Nadeem Gulam</div>
+                                                <Link href={`/clwvpmlx100029wljjdsd2s04`} className='bg-white text-black text-sm px-5 py-1 w-full  rounded-lg'>View</Link>
                                             </div>
-                                        </div>)
+                                        </div> :
+
+                                        user?.recommendedUsers?.map(el =>
+                                            <div key={el?.id} className='flex items-center gap-3 mt-2'>{el?.profileImageURL && (
+                                                <Image
+                                                    src={el.profileImageURL}
+                                                    alt='profile-image'
+                                                    className='rounded-full'
+                                                    height={60}
+                                                    width={60}
+                                                />
+                                            )}
+                                                <div className='text-lg'>
+                                                    <div>{el?.firstName} {el?.lastName}</div>
+                                                    <Link href={`/${el?.id}`} className='bg-white text-black text-sm px-5 py-1 w-full  rounded-lg'>View</Link>
+                                                </div>
+                                            </div>)
                                 }
                             </div>
                         }
 
+                        {/* My Info Section */}
+                        <div className="py-3 px-4 bg-slate-800 rounded-lg mt-5 ">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h1 className="text-white text-xl font-bold">Nadeem Gulam</h1>
+                                    {/* <p className="text-gray-300">Software Developer</p> */}
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <a href="https://github.com/NadeemGulam" target="_blank" rel="noopener noreferrer">
+                                        <FaGithub className="text-gray-300 hover:text-white cursor-pointer" size={24} />
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/nadeem-gulam/" target="_blank" rel="noopener noreferrer">
+                                        <FaLinkedin className="text-gray-300 hover:text-white cursor-pointer" size={24} />
+                                    </a>
+                                    <a href="https://drive.google.com/drive/folders/15qhPgEMgB1LJqA-lMKzMeMHmblB_q1iU?usp=sharing" target="_blank" rel="noopener noreferrer">
+                                        <FaFilePdf className="text-gray-300 hover:text-white cursor-pointer" size={24} />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
