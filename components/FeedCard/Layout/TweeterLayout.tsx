@@ -97,8 +97,11 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                 window.localStorage.setItem("__Twitter_token", verifyGoogleToken);
             }
             console.log("about to run await ");
+            console.log(user);
             await queryClient.invalidateQueries({ queryKey: ["current-user"] });
+            console.log(user);
             console.log("Finished invalidating queries");
+            window.location.reload();
         },
         [queryClient]
     );
@@ -149,7 +152,7 @@ const TweeterLayout: React.FC<TweeterLayoutProps> = (props) => {
                         {props.children}
                     </div>
                     <div className="col-span-0 sm:col-span-3 p-5 flex flex-col justify-between">
-                        {!user ? (
+                        {!user || !localStorage.getItem('__Twitter_token') ? (
                             <div className="p-5 bg-slate-700 rounded-lg">
                                 <h1 className="my-2 text-xl">New To Twitter?</h1>
                                 <GoogleLogin onSuccess={handleLoginWithGoogle} />
