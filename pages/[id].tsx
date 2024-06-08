@@ -35,15 +35,15 @@ const UserProfile: NextPage<ServerProps> = (props) => {
 
     const handleFollowUser = useCallback(async () => {
         if (!props.userInfo?.id) return;
-        await graphqlClient.request(followUserMutation, { to: props.userInfo?.id })
-        await queryClient.invalidateQueries(["current-user"])
-    }, [props.userInfo?.id, queryClient])
+        await graphqlClient.request(followUserMutation, { to: props.userInfo?.id });
+        await queryClient.invalidateQueries({ queryKey: ["current-user"] });
+    }, [props.userInfo?.id, queryClient]);
 
     const handleUnfollowUser = useCallback(async () => {
         if (!props.userInfo?.id) return;
-        await graphqlClient.request(unfollowUserMutation, { to: props.userInfo?.id })
-        await queryClient.invalidateQueries(["current-user"])
-    }, [props.userInfo?.id, queryClient])
+        await graphqlClient.request(unfollowUserMutation, { to: props.userInfo?.id });
+        await queryClient.invalidateQueries({ queryKey: ["current-user"] });
+    }, [props.userInfo?.id, queryClient]);
 
     return (
         <div>

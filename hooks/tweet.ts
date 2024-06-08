@@ -48,21 +48,21 @@ export const useGetAllTweets = () => {
     return { tweets: data?.getAllTweets, isError, error, isLoading };
 }
 
-// useCreateTweets hook
+
 export const useCreateTweets = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (payload: CreateTweetData) => graphqlClient.request(createTweetMutation, { payload }),
         onMutate: (payload) => {
-            toast.loading("Creating your Tweet ", { id: '1' });
+            toast.loading("Creating your Tweet", { id: '1' });
             console.log("In mutate");
         },
         onSuccess: async (payload) => {
             console.log("Inside OnSuccess");
             try {
-                await queryClient.invalidateQueries(["all-tweet"]);
+                await queryClient.invalidateQueries({ queryKey: ["all-tweet"] });
                 console.log("Queries invalidated");
-                await queryClient.refetchQueries(["all-tweet"]); // Manually refetch to ensure fresh data
+                await queryClient.refetchQueries({ queryKey: ["all-tweet"] }); // Manually refetch to ensure fresh data
             } catch (error) {
                 console.error("Error invalidating queries:", error);
             }
@@ -74,4 +74,4 @@ export const useCreateTweets = () => {
         }
     });
     return mutation;
-}
+};
